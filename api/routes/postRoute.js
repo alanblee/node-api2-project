@@ -9,8 +9,17 @@ router.route("/").get(posts.getPosts);
 router.route("/").post(posts.createPost);
 
 //GET get specific post
-router.route("/:postId").get(posts.singlePost)
+router.route("/:postId").get(posts.singlePost);
 
 //PUT edit specific post
-router.route("/:postId").put(posts.editPost)
+router.route("/:postId").put(posts.editPost);
+
+//DELETE delete specific post
+router.route("/:postId").delete(posts.deletePost);
+
+
+
+
+
+
 module.exports = router;

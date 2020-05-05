@@ -80,12 +80,29 @@ module.exports.editPost = async (req, res) => {
           .json({ message: "The post with the specified ID does not exist." });
       }
     } catch (err) {
-      res
-        .status(500)
-        .json({
-          error: "The post information could not be modified.",
-          err: err.message,
-        });
+      res.status(500).json({
+        error: "The post information could not be modified.",
+        err: err.message,
+      });
     }
+  }
+};
+
+//DELETE deletes a specific post
+module.exports.deletePost = async (req, res) => {
+  const postId = req.params.postId;
+  try {
+    const deletedPost = await posts.remove(postId);
+    if (deletedPost.length > 0) {
+      res.status(200).json(deletedPost);
+    } else {
+      res
+        .status(404)
+        .json({ message: "The post with the specified ID does not exist." });
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "The post could not be removed", err: err.message });
   }
 };
