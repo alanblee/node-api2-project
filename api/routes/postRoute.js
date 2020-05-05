@@ -6,5 +6,6 @@ posts = require("../controllers/postController");
 router.route("/").get(posts.getPosts);
 // POST create new post
 router.route("/").post(posts.createPost);
-
+//GET get specific post
+router.route("/:postId").get(posts.singlePost)
 module.exports = router;
