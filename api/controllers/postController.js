@@ -54,3 +54,34 @@ module.exports.singlePost = async (req, res) => {
       .json({ error: "The post information could not be retrieved.", err });
   }
 };
+
+//PUT edit specific post
+module.exports.editPost = async (req, res) => {
+  const postId = req.params.postId;
+  const { title, contents } = req.body;
+
+  if (!title && !contents) {
+    res.status(400).json({
+      errorMessage: "Please provide title and contents for the post.",
+    });
+  } else {
+    try {
+      const postInfo = {
+        title,
+        contents,
+      };
+      const updatedPost = await posts.update(postId, postInfo);
+      if (updatePost === 1) {
+        res.status(200).json(updatedPost);
+      } else {
+        res
+          .status(404)
+          .json({ message: "The post with the specified ID does not exist." });
+      }
+    } catch (err) {
+      res
+        .status(500)
+        .json({ error: "The post information could not be modified.", err });
+    }
+  }
+};
