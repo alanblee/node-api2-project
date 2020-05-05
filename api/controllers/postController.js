@@ -65,13 +65,14 @@ module.exports.editPost = async (req, res) => {
       errorMessage: "Please provide title and contents for the post.",
     });
   } else {
+    const postInfo = {
+      title,
+      contents,
+    };
     try {
-      const postInfo = {
-        title,
-        contents,
-      };
       const updatedPost = await posts.update(postId, postInfo);
-      if (updatePost === 1) {
+
+      if (Number(updatedPost) === 1) {
         res.status(200).json(updatedPost);
       } else {
         res
@@ -81,7 +82,10 @@ module.exports.editPost = async (req, res) => {
     } catch (err) {
       res
         .status(500)
-        .json({ error: "The post information could not be modified.", err });
+        .json({
+          error: "The post information could not be modified.",
+          err: err.message,
+        });
     }
   }
 };
