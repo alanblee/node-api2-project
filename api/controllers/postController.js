@@ -93,7 +93,7 @@ module.exports.deletePost = async (req, res) => {
   const postId = req.params.postId;
   try {
     const deletedPost = await posts.remove(postId);
-    if (deletedPost.length > 0) {
+    if (Number(deletedPost) === 1) {
       res.status(200).json(deletedPost);
     } else {
       res
@@ -104,5 +104,26 @@ module.exports.deletePost = async (req, res) => {
     res
       .status(500)
       .json({ error: "The post could not be removed", err: err.message });
+  }
+};
+
+//GET get all comments for a specific post
+module.exports.getPostComments = async (req, res) => {
+  const postId = req.params.postId;
+  try {
+    const postComments = await posts.findPostComments(postId);
+    console.log(postComments)
+    if (postComments.length > 0) {
+      res.status(200).json(postComments);
+    } else {
+      res
+        .status(404)
+        .json({ message: "The post with the specified ID does not exist." });
+    }
+  } catch (err) {
+    res.status(500).json({
+      error: "The comments information could not be retrieved.",
+      err: err.message,
+    });
   }
 };

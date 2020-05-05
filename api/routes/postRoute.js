@@ -17,7 +17,8 @@ router.route("/:postId").put(posts.editPost);
 //DELETE delete specific post
 router.route("/:postId").delete(posts.deletePost);
 
-
+//GET get all comments from specific post
+router.route("/:postId/comments").get(posts.getPostComments)
 
 
 
