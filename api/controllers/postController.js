@@ -92,9 +92,11 @@ module.exports.editPost = async (req, res) => {
 module.exports.deletePost = async (req, res) => {
   const postId = req.params.postId;
   try {
+    const postToDelete = await posts.findById(postId);
     const deletedPost = await posts.remove(postId);
+    console.log(postToDelete);
     if (Number(deletedPost) === 1) {
-      res.status(200).json(deletedPost);
+      res.status(200).json(postToDelete[0]);
     } else {
       res
         .status(404)
@@ -138,7 +140,7 @@ module.exports.createNewComment = async (req, res) => {
   } else {
     const comment = {
       text,
-      post_id: postId
+      post_id: postId,
     };
     try {
       const newComment = await posts.insertComment(comment);
