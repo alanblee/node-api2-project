@@ -15,7 +15,7 @@ module.exports.getPosts = async (req, res) => {
 //POST create new post
 module.exports.createPost = async (req, res) => {
   const { title, contents } = req.body;
-  if (!title && !contents) {
+  if (!title || !contents) {
     res.status(400).json({
       errorMessage: "Please provide title and contents for the post.",
     });
@@ -60,7 +60,7 @@ module.exports.editPost = async (req, res) => {
   const postId = req.params.postId;
   const { title, contents } = req.body;
 
-  if (!title && !contents) {
+  if (!title || !contents) {
     res.status(400).json({
       errorMessage: "Please provide title and contents for the post.",
     });
@@ -112,7 +112,6 @@ module.exports.getPostComments = async (req, res) => {
   const postId = req.params.postId;
   try {
     const postComments = await posts.findPostComments(postId);
-    console.log(postComments)
     if (postComments.length > 0) {
       res.status(200).json(postComments);
     } else {
@@ -125,5 +124,37 @@ module.exports.getPostComments = async (req, res) => {
       error: "The comments information could not be retrieved.",
       err: err.message,
     });
+  }
+};
+
+//POST create a new comment for the post
+module.exports.createNewComment = async (req, res) => {
+  const postId = req.params.postId;
+  const { text } = req.body;
+  if (!text) {
+    res
+      .status(400)
+      .json({ errorMessage: "Please provide text for the comment." });
+  } else {
+    const comment = {
+      text,
+      post_id: postId
+    };
+    try {
+      const newComment = await posts.insertComment(comment);
+      console.log(newComment);
+      if (newComment) {
+        res.status(201).json(newComment);
+      } else {
+        res
+          .status(404)
+          .json({ message: "The post with the specified ID does not exist." });
+      }
+    } catch (err) {
+      res.status(500).json({
+        error: "There was an error while saving the comment to the database",
+        err: err.message,
+      });
+    }
   }
 };

@@ -18,8 +18,10 @@ router.route("/:postId").put(posts.editPost);
 router.route("/:postId").delete(posts.deletePost);
 
 //GET get all comments from specific post
-router.route("/:postId/comments").get(posts.getPostComments)
+router.route("/:postId/comments").get(posts.getPostComments);
 
+//POST create comment for specific post
+router.route("/:postId/comments").post(posts.createNewComment);
 
 
 
